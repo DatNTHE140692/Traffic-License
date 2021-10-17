@@ -10,7 +10,6 @@ import vn.edu.fpt.traffic_license.utils.DateUtils;
 import vn.edu.fpt.traffic_license.utils.SignUtils;
 
 import java.security.NoSuchAlgorithmException;
-import java.security.PrivateKey;
 import java.security.spec.InvalidKeySpecException;
 import java.util.Date;
 
@@ -30,29 +29,26 @@ public class JWTUtils {
     public String generateToken(UserDetails userDetails) throws InvalidKeySpecException, NoSuchAlgorithmException {
         Date now = DateUtils.now();
         Date expiryDate = new Date(now.getTime() + jwtConfig.getExpiresIn());
-        PrivateKey privateKey = SignUtils.convertStrToPrivateKey(jwtConfig.getPrivateKey());
         return Jwts.builder()
                 .setSubject(userDetails.getUsername())
                 .setIssuedAt(now)
                 .setExpiration(expiryDate)
-                .signWith(signatureAlgorithm, privateKey)
+                .signWith(signatureAlgorithm, SignUtils.convertStrToPrivateKey(jwtConfig.getPrivateKey()))
                 .compact();
     }
 
     public String extractUsername(String token) throws InvalidKeySpecException, NoSuchAlgorithmException {
-        PrivateKey privateKey = SignUtils.convertStrToPrivateKey(jwtConfig.getPrivateKey());
         return Jwts.parser()
-                .setSigningKey(privateKey)
+                .setSigningKey(SignUtils.convertStrToPrivateKey(jwtConfig.getPrivateKey()))
                 .parseClaimsJws(token)
                 .getBody()
                 .getSubject();
     }
 
-    public Boolean isTokenValid(String token) {
+    public boolean isTokenValid(String token) {
         try {
-            PrivateKey privateKey = SignUtils.convertStrToPrivateKey(jwtConfig.getPrivateKey());
             Jwts.parser()
-                    .setSigningKey(privateKey)
+                    .setSigningKey(SignUtils.convertStrToPublicKey(jwtConfig.getPublicKey()))
                     .parseClaimsJws(token);
             return true;
         } catch (MalformedJwtException ex) {

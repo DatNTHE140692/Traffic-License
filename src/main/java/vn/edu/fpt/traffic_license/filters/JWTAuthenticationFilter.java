@@ -22,14 +22,14 @@ import java.io.IOException;
 
 @Slf4j
 @Component
-public class JwtAuthenticationFilter extends OncePerRequestFilter {
+public class JWTAuthenticationFilter extends OncePerRequestFilter {
 
-    private JWTConfig jwtConfig;
-    private JWTUtils jwtUtils;
-    private UserServices userServices;
+    private final JWTConfig jwtConfig;
+    private final JWTUtils jwtUtils;
+    private final UserServices userServices;
 
     @Autowired
-    public JwtAuthenticationFilter(JWTConfig jwtConfig,
+    public JWTAuthenticationFilter(JWTConfig jwtConfig,
                                    JWTUtils jwtUtils,
                                    UserServices userServices) {
         this.jwtConfig = jwtConfig;
@@ -55,11 +55,13 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                         authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
                         SecurityContextHolder.getContext().setAuthentication(authentication);
                     } else {
-
+                        response.sendError(HttpServletResponse.SC_FORBIDDEN);
+                        return;
                     }
                 }
             } else {
-
+                response.sendError(HttpServletResponse.SC_FORBIDDEN);
+                return;
             }
         } catch (Exception ex) {
             log.error("Authentication Failed, {}", ex.getMessage());

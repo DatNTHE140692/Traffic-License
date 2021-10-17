@@ -13,7 +13,8 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
-import vn.edu.fpt.traffic_license.filters.JwtAuthenticationFilter;
+import vn.edu.fpt.traffic_license.filters.JWTAuthenticationEntryPoint;
+import vn.edu.fpt.traffic_license.filters.JWTAuthenticationFilter;
 import vn.edu.fpt.traffic_license.service.UserServices;
 
 import java.util.Arrays;
@@ -22,13 +23,16 @@ import java.util.Arrays;
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     private final UserServices userServices;
-    private final JwtAuthenticationFilter jwtAuthenticationFilter;
+    private final JWTAuthenticationFilter jwtAuthenticationFilter;
+    private final JWTAuthenticationEntryPoint jwtAuthenticationEntryPoint;
 
     @Autowired
     public SecurityConfig(UserServices userServices,
-                          JwtAuthenticationFilter jwtAuthenticationFilter) {
+                          JWTAuthenticationFilter jwtAuthenticationFilter,
+                          JWTAuthenticationEntryPoint jwtAuthenticationEntryPoint) {
         this.userServices = userServices;
         this.jwtAuthenticationFilter = jwtAuthenticationFilter;
+        this.jwtAuthenticationEntryPoint = jwtAuthenticationEntryPoint;
     }
 
     @Bean
@@ -63,6 +67,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http.csrf().disable();
         http.cors().configurationSource(request -> corsConfiguration);
         http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+        http.exceptionHandling().authenticationEntryPoint(jwtAuthenticationEntryPoint);
         http.authorizeRequests()
                 .antMatchers("/auth/login").permitAll()
                 .anyRequest().authenticated();

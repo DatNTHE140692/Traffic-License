@@ -6,6 +6,10 @@ jwt:
 server:
   port: 9090
 spring:
+  jpa:
+    properties:
+      hibernate:
+        enable_lazy_load_no_trans: true
   datasource:
     url: jdbc:mysql://localhost:3306/traffic_license?autoReconnect=true&failOverReadOnly=false&maxReconnects=10
     username: test

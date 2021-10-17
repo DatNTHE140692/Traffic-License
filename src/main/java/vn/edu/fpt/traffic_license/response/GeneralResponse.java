@@ -15,7 +15,7 @@ import lombok.*;
 public class GeneralResponse<D> {
 
     @JsonProperty("success")
-    private Boolean success;
+    private boolean success;
 
     @JsonProperty("message")
     private String message;

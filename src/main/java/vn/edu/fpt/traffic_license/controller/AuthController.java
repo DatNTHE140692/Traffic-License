@@ -7,12 +7,10 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import vn.edu.fpt.traffic_license.config.jwt.JWTConfig;
+import vn.edu.fpt.traffic_license.constants.ResponseStatusCodeConst;
 import vn.edu.fpt.traffic_license.model.user.LoginRequest;
-import vn.edu.fpt.traffic_license.response.GeneralResponse;
 import vn.edu.fpt.traffic_license.response.ResponseFactory;
 import vn.edu.fpt.traffic_license.utils.jwt.JWTUtils;
 
@@ -22,19 +20,30 @@ import vn.edu.fpt.traffic_license.utils.jwt.JWTUtils;
 public class AuthController {
 
     private final JWTUtils jwtUtils;
+    private final JWTConfig jwtConfig;
     private final ResponseFactory responseFactory;
     private final AuthenticationManager authenticationManager;
 
     @PostMapping("/login")
     public ResponseEntity<Object> authenticate(@RequestBody LoginRequest loginRequest) {
-        Authentication authentication = authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(
-                        loginRequest.getUsername(),
-                        loginRequest.getPassword()
-                )
-        );
-        SecurityContextHolder.getContext().setAuthentication(authentication);
-        return responseFactory.success(jwtUtils.generateToken((UserDetails) authentication.getPrincipal()));
+        try {
+            Authentication authentication = authenticationManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(
+                            loginRequest.getUsername(),
+                            loginRequest.getPassword()
+                    )
+            );
+            SecurityContextHolder.getContext().setAuthentication(authentication);
+            String token = jwtUtils.generateToken((UserDetails) authentication.getPrincipal());
+            return responseFactory.success(jwtConfig.getTokenPrefix() + token);
+        } catch (Exception ex) {
+            return responseFactory.fail(ex.getMessage(), ResponseStatusCodeConst.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @GetMapping("/test")
+    public ResponseEntity<Object> authenticated() {
+        return responseFactory.success("OK");
     }
 
 }

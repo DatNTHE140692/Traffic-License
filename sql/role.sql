@@ -1,4 +1,4 @@
-CREATE TABLE role
+CREATE TABLE `role`
 (
     `id` int auto_increment,
     `code` varchar(150) CHARACTER SET utf8 COLLATE utf8_unicode_ci DEFAULT NULL,

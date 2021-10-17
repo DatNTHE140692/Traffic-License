@@ -35,7 +35,7 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<Object> authenticate(@RequestBody LoginRequest loginRequest) {
+    public ResponseEntity<Object> login(@RequestBody LoginRequest loginRequest) {
         try {
             Authentication authentication = authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(
@@ -55,7 +55,16 @@ public class AuthController {
                     .build();
             return responseFactory.success(response);
         } catch (Exception ex) {
-            return responseFactory.fail(ex.getMessage(), ResponseStatusCodeConst.INTERNAL_SERVER_ERROR);
+            return responseFactory.fail(String.format("Server error, %s", ex.getMessage()), ResponseStatusCodeConst.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @PutMapping("/register")
+    public ResponseEntity<Object> register(@RequestBody LoginRequest loginRequest) {
+        try {
+            return null;
+        } catch (Exception ex) {
+            return responseFactory.fail(String.format("Server error, %s", ex.getMessage()), ResponseStatusCodeConst.INTERNAL_SERVER_ERROR);
         }
     }
 

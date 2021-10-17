@@ -1,0 +1,19 @@
+version: "3.7"
+services:
+  mysql:
+    image: mysql:8.0.26
+    restart: always
+    environment:
+      MYSQL_DATABASE: traffic_license
+      MYSQL_USER: test
+      MYSQL_PASSWORD: 123123
+      MYSQL_ROOT_PASSWORD: 123123
+    command: [ 'mysqld', '--character-set-server=utf8mb4', '--collation-server=utf8mb4_unicode_ci' ]
+    ports:
+      - 3306:3306
+    expose:
+      - 3306
+    volumes:
+      - mysql-data:/var/lib/mysql
+volumes:
+  mysql-data:

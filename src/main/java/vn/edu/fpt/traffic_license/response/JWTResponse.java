@@ -2,7 +2,7 @@ package vn.edu.fpt.traffic_license.response;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
-import vn.edu.fpt.traffic_license.model.user.Role;
+import vn.edu.fpt.traffic_license.entities.Role;
 
 import java.util.Set;
 

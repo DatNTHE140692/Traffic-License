@@ -1,4 +1,4 @@
-package vn.edu.fpt.traffic_license.model.user;
+package vn.edu.fpt.traffic_license.entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;

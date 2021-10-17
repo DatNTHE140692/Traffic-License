@@ -9,7 +9,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import vn.edu.fpt.traffic_license.constants.ResponseStatusCodeConst;
 import vn.edu.fpt.traffic_license.model.user.LoginRequest;
-import vn.edu.fpt.traffic_license.model.user.User;
+import vn.edu.fpt.traffic_license.entities.User;
 import vn.edu.fpt.traffic_license.model.user.UserDetailsImpl;
 import vn.edu.fpt.traffic_license.response.JWTResponse;
 import vn.edu.fpt.traffic_license.response.ResponseFactory;

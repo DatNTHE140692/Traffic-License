@@ -7,6 +7,8 @@ import lombok.Setter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+import vn.edu.fpt.traffic_license.entities.Role;
+import vn.edu.fpt.traffic_license.entities.User;
 import vn.edu.fpt.traffic_license.utils.Utils;
 
 import java.util.Collection;

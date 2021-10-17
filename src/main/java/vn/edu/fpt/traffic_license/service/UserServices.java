@@ -5,7 +5,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
-import vn.edu.fpt.traffic_license.model.user.User;
+import vn.edu.fpt.traffic_license.entities.User;
 import vn.edu.fpt.traffic_license.model.user.UserDetailsImpl;
 import vn.edu.fpt.traffic_license.repository.UserRepository;
 

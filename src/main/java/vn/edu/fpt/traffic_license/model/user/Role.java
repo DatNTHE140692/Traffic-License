@@ -1,5 +1,6 @@
 package vn.edu.fpt.traffic_license.model.user;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.*;
@@ -30,6 +31,9 @@ public class Role {
     private String name;
 
     @ManyToMany(mappedBy = "roles")
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
+    @JsonIgnore
     private Set<User> user;
 
 }

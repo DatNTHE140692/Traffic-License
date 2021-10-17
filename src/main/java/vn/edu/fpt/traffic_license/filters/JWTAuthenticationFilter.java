@@ -25,6 +25,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
+import java.util.List;
 
 @Slf4j
 @Component
@@ -34,6 +36,9 @@ public class JWTAuthenticationFilter extends OncePerRequestFilter {
     private final JWTUtils jwtUtils;
     private final UserServices userServices;
     private final ResponseFactory responseFactory;
+
+    private static final List<String> filterURI = new ArrayList<>();
+    private static final List<String> roleAuthorizeURI = new ArrayList<>();
 
     @Autowired
     public JWTAuthenticationFilter(JWTConfig jwtConfig,
@@ -48,35 +53,43 @@ public class JWTAuthenticationFilter extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-        try {
-            String authorization = request.getHeader(HttpHeaders.AUTHORIZATION);
-            if (StringUtils.isBlank(authorization) || !authorization.startsWith(jwtConfig.getTokenPrefix())) {
-                returnError(response, ResponseStatusCodeConst.FORBIDDEN, null);
-                return;
-            }
-            String token = authorization.substring(7);
-            String username = jwtUtils.extractUsername(token);
-            if (jwtUtils.isTokenValid(token) && StringUtils.isNotBlank(username)) {
-                UserDetails userDetails = userServices.loadUserByUsername(username);
-                if (userDetails == null) {
+        if (needAuthorize(request.getRequestURI())) {
+            try {
+                String authorization = request.getHeader(HttpHeaders.AUTHORIZATION);
+                if (StringUtils.isNotBlank(authorization) && authorization.startsWith(jwtConfig.getTokenPrefix())) {
+                    String token = authorization.substring(7);
+                    String username = jwtUtils.extractUsername(token);
+                    if (jwtUtils.isTokenValid(token) && StringUtils.isNotBlank(username)) {
+                        UserDetails userDetails = userServices.loadUserByUsername(username);
+                        if (userDetails != null) {
+                            UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
+                                    userDetails,
+                                    null,
+                                    userDetails.getAuthorities()
+                            );
+                            authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+                            SecurityContextHolder.getContext().setAuthentication(authentication);
+                        } else {
+                            returnError(response, ResponseStatusCodeConst.FORBIDDEN, null);
+                            return;
+                        }
+                    }
+                } else {
                     returnError(response, ResponseStatusCodeConst.FORBIDDEN, null);
                     return;
                 }
-                UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
-                        userDetails,
-                        null,
-                        userDetails.getAuthorities()
-                );
-                authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-                SecurityContextHolder.getContext().setAuthentication(authentication);
+            } catch (Exception ex) {
+                log.error("Authentication Failed, {}", ex.getMessage());
             }
-        } catch (Exception ex) {
-            log.error("Authentication Failed, {}", ex.getMessage());
         }
         filterChain.doFilter(request, response);
     }
 
-    public void returnError(HttpServletResponse response, ResponseStatusCodeConst statusCodeConst, String errorDetail) throws IOException {
+    private boolean needAuthorize(String reqUri) {
+        return filterURI.stream().anyMatch(reqUri::startsWith);
+    }
+
+    private void returnError(HttpServletResponse response, ResponseStatusCodeConst statusCodeConst, String errorDetail) throws IOException {
         ResponseEntity<Object> responseEntity = responseFactory.fail(errorDetail, statusCodeConst);
         response.setStatus(statusCodeConst.getHttpCode());
         response.setCharacterEncoding(StandardCharsets.UTF_8.name());

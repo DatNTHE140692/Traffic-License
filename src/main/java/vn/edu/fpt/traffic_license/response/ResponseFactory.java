@@ -1,7 +1,5 @@
 package vn.edu.fpt.traffic_license.response;
 
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import vn.edu.fpt.traffic_license.constants.ResponseStatusCodeConst;

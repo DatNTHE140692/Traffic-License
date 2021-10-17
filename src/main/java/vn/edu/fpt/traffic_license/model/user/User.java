@@ -41,6 +41,8 @@ public class User {
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "role_id")
     )
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
     private Set<Role> roles;
 
 }

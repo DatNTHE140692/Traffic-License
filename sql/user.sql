@@ -9,9 +9,10 @@ CREATE TABLE `user`
     `district_id`           int                                                     DEFAULT NULL,
     `province_id`           int                                                     DEFAULT NULL,
     `city_id`               int                                                     DEFAULT NULL,
+    `company_id`            int                                                     DEFAULT NULL,
     `no_vaccinated`         tinyint                                                 DEFAULT 0,
     `enabled`               tinyint                                                 DEFAULT 1,
     `locked`                tinyint                                                 DEFAULT 0,
     PRIMARY KEY (`id`),
-    UNIQUE KEY (`username`)
+    UNIQUE KEY (`username`, `phone_number`, `email`, `identification_number`)
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;

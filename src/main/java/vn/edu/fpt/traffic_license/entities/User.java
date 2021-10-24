@@ -29,6 +29,18 @@ public class User {
     @Column(name = "password")
     private String password;
 
+    @Column(name = "email", unique = true)
+    private String email;
+
+    @Column(name = "phone_number", unique = true)
+    private String phoneNumber;
+
+    @Column(name = "identification_number", unique = true)
+    private String identificationNumber;
+
+    @Column(name = "no_vaccinated")
+    private Long noOfVaccinated;
+
     @Column(name = "enabled")
     private Boolean enabled;
 
@@ -44,5 +56,29 @@ public class User {
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
     private Set<Role> roles;
+
+    @ManyToOne
+    @JoinColumn(name = "district_id")
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
+    private District district;
+
+    @ManyToOne
+    @JoinColumn(name = "province_id")
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
+    private Province province;
+
+    @ManyToOne
+    @JoinColumn(name = "city_id")
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
+    private City city;
+
+    @ManyToOne
+    @JoinColumn(name = "company_id")
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
+    private Company company;
 
 }

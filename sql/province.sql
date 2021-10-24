@@ -1,7 +1,7 @@
 CREATE TABLE `province`
 (
     `id`      INT auto_increment,
-    `name`    varchar(255) VARCHAR (255) CHARACTER SET utf8 COLLATE utf8_unicode_ci DEFAULT NULL,
+    `name`    VARCHAR (255) CHARACTER SET utf8 COLLATE utf8_unicode_ci DEFAULT NULL,
     `city_id` INT DEFAULT NULL,
     UNIQUE KEY (`name`),
     PRIMARY KEY (`id`)

@@ -1,8 +1,8 @@
 package vn.edu.fpt.traffic_license.filters;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -25,12 +25,12 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
 @Slf4j
 @Component
+@RequiredArgsConstructor
 public class JWTAuthenticationFilter extends OncePerRequestFilter {
 
     private final JWTConfig jwtConfig;
@@ -38,23 +38,12 @@ public class JWTAuthenticationFilter extends OncePerRequestFilter {
     private final UserServices userServices;
     private final ResponseFactory responseFactory;
 
-    private static final List<String> filterURI = Arrays.asList("/api/user");
-    private static final List<String> roleAuthorizeURI = new ArrayList<>();
-
-    @Autowired
-    public JWTAuthenticationFilter(JWTConfig jwtConfig,
-                                   JWTUtils jwtUtils,
-                                   UserServices userServices,
-                                   ResponseFactory responseFactory) {
-        this.jwtConfig = jwtConfig;
-        this.jwtUtils = jwtUtils;
-        this.userServices = userServices;
-        this.responseFactory = responseFactory;
-    }
+    private static final List<String> filterURI = Arrays.asList("/management");
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-        if (needAuthorize(request.getRequestURI())) {
+        String uri = request.getRequestURI();
+        if (needAuthorize(uri)) {
             try {
                 String authorization = request.getHeader(HttpHeaders.AUTHORIZATION);
                 if (StringUtils.isNotBlank(authorization) && authorization.startsWith(jwtConfig.getTokenPrefix())) {

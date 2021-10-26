@@ -27,6 +27,9 @@ public class Company {
     @Column(name = "license_no", unique = true)
     private String licenseNo;
 
+    @Column(name = "address")
+    private String address;
+
     @Column(name = "ward_id")
     private Long wardId;
 

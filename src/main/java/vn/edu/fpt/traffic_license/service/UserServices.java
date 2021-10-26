@@ -1,21 +1,30 @@
 package vn.edu.fpt.traffic_license.service;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import vn.edu.fpt.traffic_license.constants.ResponseStatusCodeConst;
+import vn.edu.fpt.traffic_license.constants.SearchOperation;
 import vn.edu.fpt.traffic_license.entities.*;
+import vn.edu.fpt.traffic_license.mapper.UserMapper;
 import vn.edu.fpt.traffic_license.model.user.UserDetailsImpl;
 import vn.edu.fpt.traffic_license.repository.*;
+import vn.edu.fpt.traffic_license.repository.specification.GenericSpecification;
+import vn.edu.fpt.traffic_license.repository.specification.SearchCriteria;
 import vn.edu.fpt.traffic_license.request.UserRequest;
+import vn.edu.fpt.traffic_license.response.GeneralResponse;
 import vn.edu.fpt.traffic_license.response.ResponseFactory;
 import vn.edu.fpt.traffic_license.response.UserResponse;
 import vn.edu.fpt.traffic_license.utils.StringUtils;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -37,6 +46,62 @@ public class UserServices implements UserDetailsService {
             throw new UsernameNotFoundException(username);
         }
         return new UserDetailsImpl(user, userRoleRepository, roleRepository);
+    }
+
+    public ResponseEntity<Object> getUsers(Pageable pageable,
+                                           String name,
+                                           String username,
+                                           String identificationNo,
+                                           String address,
+                                           Long wardId,
+                                           Long provinceId,
+                                           Long cityId,
+                                           Boolean granted) {
+        GenericSpecification<User> genericSpecification = new GenericSpecification<>();
+
+        if (StringUtils.isNotBlank(name)) {
+            genericSpecification.add(new SearchCriteria("fullName", name, SearchOperation.MATCH));
+        }
+
+        if (StringUtils.isNotBlank(username)) {
+            genericSpecification.add(new SearchCriteria("username", username, SearchOperation.MATCH));
+        }
+
+        if (StringUtils.isNotBlank(identificationNo)) {
+            genericSpecification.add(new SearchCriteria("identificationNumber", identificationNo, SearchOperation.MATCH));
+        }
+
+        if (StringUtils.isNotBlank(address)) {
+            genericSpecification.add(new SearchCriteria("address", address, SearchOperation.MATCH));
+        }
+
+        if (wardId != null) {
+            genericSpecification.add(new SearchCriteria("wardId", wardId, SearchOperation.EQUAL));
+        }
+
+        if (provinceId != null) {
+            genericSpecification.add(new SearchCriteria("provinceId", provinceId, SearchOperation.EQUAL));
+        }
+
+        if (cityId != null) {
+            genericSpecification.add(new SearchCriteria("cityId", cityId, SearchOperation.EQUAL));
+        }
+
+        if (granted != null) {
+            genericSpecification.add(new SearchCriteria("granted", granted, SearchOperation.EQUAL));
+        }
+        Page<User> userPage = userRepository.findAll(genericSpecification, pageable);
+        List<UserResponse> userDtos = userPage.getContent()
+                .stream()
+                .map(user -> UserMapper.toDto(user, null, null, null, null))
+                .collect(Collectors.toList());
+        GeneralResponse.PaginationMetadata paginationMetadata = new GeneralResponse.PaginationMetadata(
+                userPage.getSize(),
+                userPage.getTotalElements(),
+                userPage.getTotalPages(),
+                userPage.getNumber()
+        );
+        return responseFactory.success(GeneralResponse.paginated(paginationMetadata, userDtos));
     }
 
     public ResponseEntity<Object> getUserInfo(UserRequest userRequest) {

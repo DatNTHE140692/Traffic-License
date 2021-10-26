@@ -4,6 +4,7 @@ CREATE TABLE `company`
     `name`         varchar(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
     `license_no`   varchar(100) CHARACTER SET utf8 COLLATE utf8_unicode_ci DEFAULT NULL,
     `phone_number` varchar(50) CHARACTER SET utf8 COLLATE utf8_unicode_ci  DEFAULT NULL,
+    `address`      varchar(100) CHARACTER SET utf8 COLLATE utf8_unicode_ci DEFAULT NULL,
     `ward_id`      int                                                     DEFAULT NULL,
     `province_id`  int                                                     DEFAULT NULL,
     `city_id`      int                                                     DEFAULT NULL,

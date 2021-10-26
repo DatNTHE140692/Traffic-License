@@ -150,10 +150,11 @@ public class UserServices implements UserDetailsService {
     }
 
     public ResponseEntity<Object> updateUserInfo(UserRequest userRequest) {
-        User user = userRepository.findByUsername(userRequest.getUsername());
-        if (user == null) {
+        Optional<User> userOptional = userRepository.findById(userRequest.getId());
+        if (!userOptional.isPresent()) {
             return responseFactory.fail("Người dùng không tồn tại.", ResponseStatusCodeConst.DATA_NOT_FOUND_ERROR);
         }
+        User user  = userOptional.get();
 
         if (StringUtils.isBlank(userRequest.getFullName())) {
             return responseFactory.fail("Tên không được để trống.", ResponseStatusCodeConst.DATA_NOT_FOUND_ERROR);

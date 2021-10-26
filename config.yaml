@@ -4,19 +4,19 @@ jwt:
   privateKey: "MIIEvgIBADANBgkqhkiG9w0BAQEFAASCBKgwggSkAgEAAoIBAQDba5jwoza8HPmhEKfPhWI1m/19dGYwEf4V1hclFsqqB/5j9s5rDIUYn/n25YqNNl7mPVLDD+2NJTPNp2RdqlHzggnLG7LrIysTQKsRvzKi0zJPJCScFJkkOz03lvPkRQ87n5xIU87cy8uyNWAowTZbPc/6332KFu1guI9tRs14kBvN1bGh1CtipzqqY5aHFq01Keapu3WDPDzhskkrsEUGpZJssT1s6Hvvf3LId+IfsOcs+4kI1liyGUuJghf45SZgPIBZjX45NPaCwT/T9H/SdR9Z9J3S5UbBAzl/PIeoHgf1nnx++R72f0LqztfNjYAZ1/l1lyICLzkUo/e9S92FAgMBAAECggEAHllf1lrw6WyFj6Re3aqIlrssgPN+ZeQ7NXh/C4t/PSztYBTFYNOivjD0cVS3CQit8CEnxyC3Hgh5BZdDX9w8yRZhteTvJqxe2yMc9k+wmIpnQUCRyr/jnboO4ddAhUCTFo9hXbSv3mTW2B+fXQu6cbzXPU83zUeWDkSA3B/IsEXW1ejWIHb/mMs2vV3hXzhK03JFhIc+rWuZXyUi2GkM2SomomNSCXRP2vnhhSIH91BNYPgP9wzuZSjVTyOIOPhXNAfU0N5g5s8HpiJoh2HCSBDenxlq6j6IpKlw3z3PMZ5+8VhYt0qXAGL9hujeSQ9gLuEjUukCm4L4t920hTdBkQKBgQD6JILLrXZ0L5joNxl6cgxp3eb94aHx4s4752H54UrzRcHoLuTkudFDZCTS2PwyfnFFklWIrAZHbixDc/5XomRCpRtdR8xRUZX0aI/TvHerXptc65yW+CYrzCMyNbBloA/qHV318hFZEOaVoDeWvw3yMi6DR8ICIo3I2JNR+ITQVQKBgQDgjuuiD6TDCAWH8a/bMe7uZ9REooulOqeNIA7VJyO28zGv6rMYBsCuTzGFCtcmT6UYwN4aw9NhWRJ5K392apTLdhQdc2SteZLsEconR+DByj5SQ8FCqGhsArCVCgcVRobKLWtmsorWPf3lY26WmCmuDOcyx6c7YUNKJ+cmc8RIcQKBgHc6y/VVey6qOVIGYWiR0ATuNloxIEXxe6fmBDddAaKvT1vibkvvniVnKH4v2xYeWtN0iryYcm29v+9u7H7M8skpdb+ip2rjXnyfEl80aD4Q3DEQRRVYtqkNpoEaQjhOcQeAc/b1KPuxKJeNRLHf4z/cV3tPytPFsJtZT+80a+n5AoGBAJrGh2y9IY/3kHBhyhbntMqHsAvaiSvKYL/pr6+E+Z3Yw49/0g8mYFoEZZpQnXhffuivzqZeAOzhCtWPgJwq3AHckgK2jVbwK68gl9g5N5X6grgK0ULTdp2zwOgI8FbetHrXkWZIe18tfTlFLm0H1fqMFDKw3/gSkuGi3TRoqIpRAoGBAO5cswBySdROi/s0QWrbA+q61bylindDyY5QwOC5slnIoZTRuXFA5q3zdiUpQUgosdDTxg2yp4BaQDh6SHjgSM1w4eWH85MBzH2MOIqwI5yGLNhHvhXClzKNhJCIQVuAxiIWFj96L9Gvu9QXniXww3GfuyklmrAPCZZvQO4I2xCl"
   publicKey: "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA22uY8KM2vBz5oRCnz4ViNZv9fXRmMBH+FdYXJRbKqgf+Y/bOawyFGJ/59uWKjTZe5j1Sww/tjSUzzadkXapR84IJyxuy6yMrE0CrEb8yotMyTyQknBSZJDs9N5bz5EUPO5+cSFPO3MvLsjVgKME2Wz3P+t99ihbtYLiPbUbNeJAbzdWxodQrYqc6qmOWhxatNSnmqbt1gzw84bJJK7BFBqWSbLE9bOh7739yyHfiH7DnLPuJCNZYshlLiYIX+OUmYDyAWY1+OTT2gsE/0/R/0nUfWfSd0uVGwQM5fzyHqB4H9Z58fvke9n9C6s7XzY2AGdf5dZciAi85FKP3vUvdhQIDAQAB"
 server:
-  port: 5000
+  port: 9090
 spring:
   jackson:
     property-naming-strategy: SNAKE_CASE
   datasource:
-    url: jdbc:mysql://aagcktlmez5oy9.creifhvju3mo.ap-southeast-2.rds.amazonaws.com:3306/ebdb?autoReconnect=true&failOverReadOnly=false&maxReconnects=10
-    username: "datnt368"
-    password: "!LRuLMSvw5VEMXU"
+    url: jdbc:mysql://localhost:3306/traffic_license?autoReconnect=true&failOverReadOnly=false&maxReconnects=10
+    username: test
+    password: 123123
     driver-class-name: com.mysql.cj.jdbc.Driver
     hikari:
-      jdbc-url: jdbc:mysql://aagcktlmez5oy9.creifhvju3mo.ap-southeast-2.rds.amazonaws.com:3306/ebdb?autoReconnect=true&failOverReadOnly=false&maxReconnects=10
-      username: "datnt368"
-      password: "!LRuLMSvw5VEMXU"
+      jdbc-url: jdbc:mysql://localhost:3306/traffic_license?autoReconnect=true&failOverReadOnly=false&maxReconnects=10
+      username: test
+      password: 123123
       minimumIdle: 5
       maximumPoolSize: 500
       idleTimeout: 30000

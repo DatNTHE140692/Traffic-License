@@ -22,6 +22,7 @@ import vn.edu.fpt.traffic_license.repository.UserRoleRepository;
 import vn.edu.fpt.traffic_license.request.UserRegistrationRequest;
 import vn.edu.fpt.traffic_license.response.ResponseFactory;
 import vn.edu.fpt.traffic_license.response.UserInfo;
+import vn.edu.fpt.traffic_license.utils.StringUtils;
 import vn.edu.fpt.traffic_license.utils.Utils;
 import vn.edu.fpt.traffic_license.utils.jwt.JWTUtils;
 
@@ -89,6 +90,22 @@ public class AuthServices {
             return responseFactory.fail("Công ty không tồn tại.", ResponseStatusCodeConst.DATA_NOT_FOUND_ERROR);
         }
 
+        if (StringUtils.isBlank(userRegistrationRequest.getAddress())) {
+            return responseFactory.fail("Địa chỉ không được để trống.", ResponseStatusCodeConst.DATA_NOT_FOUND_ERROR);
+        }
+
+        if (userRegistrationRequest.getWardId() == null) {
+            return responseFactory.fail("Xã/Phường không được để trống.", ResponseStatusCodeConst.DATA_NOT_FOUND_ERROR);
+        }
+
+        if (userRegistrationRequest.getProvinceId() == null) {
+            return responseFactory.fail("Quận/Huyện không được để trống.", ResponseStatusCodeConst.DATA_NOT_FOUND_ERROR);
+        }
+
+        if (userRegistrationRequest.getCityId() == null) {
+            return responseFactory.fail("Tỉnh/Thành phố không được để trống.", ResponseStatusCodeConst.DATA_NOT_FOUND_ERROR);
+        }
+
         Company company = companyOptional.get();
         user = User.builder()
                 .fullName(userRegistrationRequest.getFullName())
@@ -96,6 +113,10 @@ public class AuthServices {
                 .password(passwordEncoder.encode(userRegistrationRequest.getPassword()))
                 .identificationNumber(userRegistrationRequest.getIdentificationNumber())
                 .companyId(company.getId())
+                .address(userRegistrationRequest.getAddress())
+                .wardId(userRegistrationRequest.getWardId())
+                .provinceId(userRegistrationRequest.getProvinceId())
+                .cityId(userRegistrationRequest.getCityId())
                 .enabled(true)
                 .locked(false)
                 .granted(false)

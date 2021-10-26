@@ -25,4 +25,16 @@ public class UserRegistrationRequest {
     @JsonProperty("company_id")
     private Long companyId;
 
+    @JsonProperty("address")
+    private String address;
+
+    @JsonProperty("ward_id")
+    private Long wardId;
+
+    @JsonProperty("province_id")
+    private Long provinceId;
+
+    @JsonProperty("city_id")
+    private Long cityId;
+
 }

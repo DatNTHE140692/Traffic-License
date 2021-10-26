@@ -44,7 +44,7 @@ public class CompanyController {
         }
     }
 
-    @PutMapping("/create")
+    @PutMapping
     public ResponseEntity<Object> create(@RequestBody CompanyRequest companyRequest) {
         try {
             return companyServices.create(companyRequest);
@@ -53,7 +53,7 @@ public class CompanyController {
         }
     }
 
-    @PatchMapping("/update")
+    @PatchMapping
     public ResponseEntity<Object> update(@RequestBody CompanyRequest companyRequest) {
         try {
             return companyServices.update(companyRequest);

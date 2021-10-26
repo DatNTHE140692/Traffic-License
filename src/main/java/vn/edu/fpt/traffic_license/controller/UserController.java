@@ -46,7 +46,7 @@ public class UserController {
         }
     }
 
-    @PostMapping("/get-info")
+    @PostMapping
     public ResponseEntity<Object> getUserInfo(@RequestBody UserRequest userRequest) {
         try {
             return userServices.getUserInfo(userRequest);
@@ -55,7 +55,7 @@ public class UserController {
         }
     }
 
-    @PatchMapping("/update-info")
+    @PatchMapping
     public ResponseEntity<Object> updateInfo(@RequestBody UserRequest userRequest) {
         try {
             return userServices.updateUserInfo(userRequest);

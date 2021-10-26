@@ -89,6 +89,26 @@ public class CompanyServices {
             return responseFactory.fail("Công ty đã tồn tại.", ResponseStatusCodeConst.DUPLICATE_ERROR);
         }
 
+        if (StringUtils.isBlank(companyRequest.getName())) {
+            return responseFactory.fail("Tên công ty không được để trống.", ResponseStatusCodeConst.DATA_NOT_FOUND_ERROR);
+        }
+
+        if (StringUtils.isBlank(companyRequest.getAddress())) {
+            return responseFactory.fail("Địa chỉ không được để trống.", ResponseStatusCodeConst.DATA_NOT_FOUND_ERROR);
+        }
+
+        if (companyRequest.getWardId() == null) {
+            return responseFactory.fail("Phường/Xã không được để trống.", ResponseStatusCodeConst.DATA_NOT_FOUND_ERROR);
+        }
+
+        if (companyRequest.getProvinceId() == null) {
+            return responseFactory.fail("Quận/Huyện không được để trống.", ResponseStatusCodeConst.DATA_NOT_FOUND_ERROR);
+        }
+
+        if (companyRequest.getCityId() == null) {
+            return responseFactory.fail("Tỉnh/Thành phố không được để trống.", ResponseStatusCodeConst.DATA_NOT_FOUND_ERROR);
+        }
+
         Optional<Ward> wardOptional = wardRepository.findById(companyRequest.getWardId());
         if (!wardOptional.isPresent()) {
             return responseFactory.fail("Phường/Xã không tồn tại.", ResponseStatusCodeConst.DATA_NOT_FOUND_ERROR);
@@ -109,6 +129,8 @@ public class CompanyServices {
 
         company = Company.builder()
                 .name(companyRequest.getName())
+                .licenseNo(companyRequest.getLicenseNo())
+                .address(companyRequest.getAddress())
                 .wardId(ward.getId())
                 .provinceId(province.getId())
                 .cityId(city.getId())

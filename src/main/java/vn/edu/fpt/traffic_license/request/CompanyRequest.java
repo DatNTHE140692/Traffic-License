@@ -17,6 +17,9 @@ public class CompanyRequest {
     @JsonProperty("license_no")
     private String licenseNo;
 
+    @JsonProperty("address")
+    private String address;
+
     @JsonProperty("ward_id")
     private Long wardId;
 

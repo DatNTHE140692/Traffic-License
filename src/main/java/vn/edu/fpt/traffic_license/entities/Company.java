@@ -3,7 +3,6 @@ package vn.edu.fpt.traffic_license.entities;
 import lombok.*;
 
 import javax.persistence.*;
-import java.util.Set;
 
 @Builder
 @Getter
@@ -28,30 +27,16 @@ public class Company {
     @Column(name = "license_no", unique = true)
     private String licenseNo;
 
+    @Column(name = "ward_id")
+    private Long wardId;
+
+    @Column(name = "province_id")
+    private Long provinceId;
+
+    @Column(name = "city_id")
+    private Long cityId;
+
     @Column(name = "active")
     private Boolean active;
-
-    @ManyToOne
-    @JoinColumn(name = "district_id")
-    @ToString.Exclude
-    @EqualsAndHashCode.Exclude
-    private District district;
-
-    @ManyToOne
-    @JoinColumn(name = "province_id")
-    @ToString.Exclude
-    @EqualsAndHashCode.Exclude
-    private Province province;
-
-    @ManyToOne
-    @JoinColumn(name = "city_id")
-    @ToString.Exclude
-    @EqualsAndHashCode.Exclude
-    private City city;
-
-    @OneToMany(mappedBy = "company", cascade = CascadeType.ALL)
-    @ToString.Exclude
-    @EqualsAndHashCode.Exclude
-    private Set<User> users;
 
 }

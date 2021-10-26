@@ -4,32 +4,31 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import vn.edu.fpt.traffic_license.constants.ResponseStatusCodeConst;
-import vn.edu.fpt.traffic_license.request.UserRegistrationRequest;
-import vn.edu.fpt.traffic_license.model.user.LoginRequest;
+import vn.edu.fpt.traffic_license.request.UserRequest;
 import vn.edu.fpt.traffic_license.response.ResponseFactory;
-import vn.edu.fpt.traffic_license.service.AuthServices;
+import vn.edu.fpt.traffic_license.service.UserServices;
 
 @RestController
+@RequestMapping("/api/user")
 @RequiredArgsConstructor
-@RequestMapping("/api/auth")
-public class AuthController {
+public class UserController {
 
-    private final AuthServices authServices;
+    private final UserServices userServices;
     private final ResponseFactory responseFactory;
 
-    @PostMapping("/login")
-    public ResponseEntity<Object> login(@RequestBody LoginRequest loginRequest) {
+    @PostMapping("/get-info")
+    public ResponseEntity<Object> getUserInfo(@RequestBody UserRequest userRequest) {
         try {
-            return authServices.signIn(loginRequest);
+            return userServices.getUserInfo(userRequest);
         } catch (Exception ex) {
             return responseFactory.fail(String.format("Server error, %s", ex.getMessage()), ResponseStatusCodeConst.INTERNAL_SERVER_ERROR);
         }
     }
 
-    @PutMapping("/register")
-    public ResponseEntity<Object> register(@RequestBody UserRegistrationRequest userRegistrationRequest) {
+    @PatchMapping("/update-info")
+    public ResponseEntity<Object> updateInfo(@RequestBody UserRequest userRequest) {
         try {
-            return authServices.register(userRegistrationRequest);
+            return userServices.updateUserInfo(userRequest);
         } catch (Exception ex) {
             return responseFactory.fail(String.format("Server error, %s", ex.getMessage()), ResponseStatusCodeConst.INTERNAL_SERVER_ERROR);
         }

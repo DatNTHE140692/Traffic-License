@@ -3,7 +3,6 @@ package vn.edu.fpt.traffic_license.entities;
 import lombok.*;
 
 import javax.persistence.*;
-import java.util.Set;
 
 @Getter
 @Setter
@@ -21,15 +20,5 @@ public class City {
 
     @Column(name = "name")
     private String name;
-
-    @ToString.Exclude
-    @EqualsAndHashCode.Exclude
-    @OneToMany(mappedBy = "city", cascade = CascadeType.ALL)
-    private Set<User> users;
-
-    @ToString.Exclude
-    @EqualsAndHashCode.Exclude
-    @OneToMany(mappedBy = "city", cascade = CascadeType.ALL)
-    private Set<Company> companies;
 
 }

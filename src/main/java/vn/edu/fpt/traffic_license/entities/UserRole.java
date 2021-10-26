@@ -1,27 +1,29 @@
 package vn.edu.fpt.traffic_license.entities;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.*;
 
 import javax.persistence.*;
 
+@Builder
 @Getter
 @Setter
 @Entity
-@Builder
+@Table(name = "user_role")
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "province")
-public class Province {
+@JsonInclude(JsonInclude.Include.NON_NULL)
+public class UserRole {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Long id;
 
-    @Column(name = "name")
-    private String name;
+    @Column(name = "user_id")
+    private Long userId;
 
-    @Column(name = "city_id")
-    private Long cityId;
+    @Column(name = "role_id")
+    private Long roleId;
 
 }

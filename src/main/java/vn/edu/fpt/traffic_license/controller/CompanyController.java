@@ -4,32 +4,31 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import vn.edu.fpt.traffic_license.constants.ResponseStatusCodeConst;
-import vn.edu.fpt.traffic_license.request.UserRegistrationRequest;
-import vn.edu.fpt.traffic_license.model.user.LoginRequest;
+import vn.edu.fpt.traffic_license.request.CompanyRequest;
 import vn.edu.fpt.traffic_license.response.ResponseFactory;
-import vn.edu.fpt.traffic_license.service.AuthServices;
+import vn.edu.fpt.traffic_license.service.CompanyServices;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/auth")
-public class AuthController {
+@RequestMapping("/api/company")
+public class CompanyController {
 
-    private final AuthServices authServices;
+    private final CompanyServices companyServices;
     private final ResponseFactory responseFactory;
 
-    @PostMapping("/login")
-    public ResponseEntity<Object> login(@RequestBody LoginRequest loginRequest) {
+    @PutMapping("/create")
+    public ResponseEntity<Object> create(@RequestBody CompanyRequest companyRequest) {
         try {
-            return authServices.signIn(loginRequest);
+            return companyServices.create(companyRequest);
         } catch (Exception ex) {
             return responseFactory.fail(String.format("Server error, %s", ex.getMessage()), ResponseStatusCodeConst.INTERNAL_SERVER_ERROR);
         }
     }
 
-    @PutMapping("/register")
-    public ResponseEntity<Object> register(@RequestBody UserRegistrationRequest userRegistrationRequest) {
+    @PatchMapping("/update")
+    public ResponseEntity<Object> update(@RequestBody CompanyRequest companyRequest) {
         try {
-            return authServices.register(userRegistrationRequest);
+            return companyServices.update(companyRequest);
         } catch (Exception ex) {
             return responseFactory.fail(String.format("Server error, %s", ex.getMessage()), ResponseStatusCodeConst.INTERNAL_SERVER_ERROR);
         }

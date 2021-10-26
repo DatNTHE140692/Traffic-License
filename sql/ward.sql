@@ -1,4 +1,4 @@
-CREATE TABLE `district`
+CREATE TABLE `ward`
 (
     `id`          INT auto_increment,
     `name`        VARCHAR (255) CHARACTER SET utf8 COLLATE utf8_unicode_ci DEFAULT NULL,

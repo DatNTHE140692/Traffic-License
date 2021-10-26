@@ -7,4 +7,6 @@ import vn.edu.fpt.traffic_license.entities.User;
 @Repository
 public interface UserRepository extends JpaRepository<User, Long> {
     User findByUsername(String username);
+    User findByIdentificationNumber(String identificationNo);
+    User findByUsernameAndIdentificationNumber(String username, String identificatioNo);
 }

@@ -26,6 +26,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 @Slf4j
@@ -37,7 +38,7 @@ public class JWTAuthenticationFilter extends OncePerRequestFilter {
     private final UserServices userServices;
     private final ResponseFactory responseFactory;
 
-    private static final List<String> filterURI = new ArrayList<>();
+    private static final List<String> filterURI = Arrays.asList("/api/user");
     private static final List<String> roleAuthorizeURI = new ArrayList<>();
 
     @Autowired

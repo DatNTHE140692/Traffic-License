@@ -2,7 +2,6 @@ package vn.edu.fpt.traffic_license.response;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
-import vn.edu.fpt.traffic_license.entities.Role;
 
 import java.util.Set;
 
@@ -11,16 +10,19 @@ import java.util.Set;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class JWTResponse {
+public class UserInfo {
 
     @JsonProperty("id")
     private Long id;
+
+    @JsonProperty("full_name")
+    private String fullName;
 
     @JsonProperty("username")
     private String username;
 
     @JsonProperty("roles")
-    private Set<Role> roles;
+    private Set<String> roles;
 
     @JsonProperty("accessToken")
     private String accessToken;

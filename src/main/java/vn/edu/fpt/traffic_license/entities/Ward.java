@@ -1,7 +1,5 @@
 package vn.edu.fpt.traffic_license.entities;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.*;
 
 import javax.persistence.*;
@@ -12,20 +10,18 @@ import javax.persistence.*;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "role")
-@JsonInclude(value = JsonInclude.Include.NON_NULL)
-@JsonIgnoreProperties(ignoreUnknown = true)
-public class Role {
+@Table(name = "ward")
+public class Ward {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Long id;
 
-    @Column(name = "code", unique = true)
-    private String code;
-
     @Column(name = "name")
     private String name;
+
+    @Column(name = "province_id")
+    private Long provinceId;
 
 }

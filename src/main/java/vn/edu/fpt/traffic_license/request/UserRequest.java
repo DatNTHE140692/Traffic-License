@@ -20,6 +20,15 @@ public class UserRequest {
     @JsonProperty("identification_number")
     private String identificationNumber;
 
+    @JsonProperty("no_of_vaccinated")
+    private Long noOfVaccinated;
+
+    @JsonProperty("granted")
+    private Boolean granted;
+
+    @JsonProperty("address")
+    private String address;
+
     @JsonProperty("ward_id")
     private Long wardId;
 

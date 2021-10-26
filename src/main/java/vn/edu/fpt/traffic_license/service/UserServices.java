@@ -7,21 +7,27 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import vn.edu.fpt.traffic_license.constants.ResponseStatusCodeConst;
-import vn.edu.fpt.traffic_license.entities.User;
+import vn.edu.fpt.traffic_license.entities.*;
 import vn.edu.fpt.traffic_license.model.user.UserDetailsImpl;
-import vn.edu.fpt.traffic_license.repository.RoleRepository;
-import vn.edu.fpt.traffic_license.repository.UserRepository;
-import vn.edu.fpt.traffic_license.repository.UserRoleRepository;
+import vn.edu.fpt.traffic_license.repository.*;
 import vn.edu.fpt.traffic_license.request.UserRequest;
 import vn.edu.fpt.traffic_license.response.ResponseFactory;
+import vn.edu.fpt.traffic_license.response.UserResponse;
+import vn.edu.fpt.traffic_license.utils.StringUtils;
+
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
 public class UserServices implements UserDetailsService {
 
     private final UserRepository userRepository;
-    private final ResponseFactory responseFactory;
+    private final CityRepository cityRepository;
     private final RoleRepository roleRepository;
+    private final WardRepository wardRepository;
+    private final ResponseFactory responseFactory;
+    private final CompanyRepository companyRepository;
+    private final ProvinceRepository provinceRepository;
     private final UserRoleRepository userRoleRepository;
 
     @Override
@@ -34,25 +40,134 @@ public class UserServices implements UserDetailsService {
     }
 
     public ResponseEntity<Object> getUserInfo(UserRequest userRequest) {
-//        User user = userRepository.findByUsernameAndIdentificationNumber(userRequest.getUsername(), userRequest.getIdentificationNumber());
-//        if (user == null) {
-//            return responseFactory.fail("Không tìm thấy người dùng.", ResponseStatusCodeConst.DATA_NOT_FOUND_ERROR);
-//        }
-//        String reqName = StringUtils.removeAccent(userRequest.getFullName()).replaceAll("\\s+", " ");
-//        String resName = StringUtils.removeAccent(user.getFullName()).replaceAll("\\s+", " ");
-//        if (reqName.equals(resName)) {
-//            Company resCompany = user.getCompany();
-//            Long companyId = userRequest.getCompanyId();
-//            if (resCompany != null && resCompany.getActive() && resCompany.getId().longValue() == companyId) {
-//                return responseFactory.success(user.getGranted());
-//            }
-//            return responseFactory.fail("Người dùng không hợp lệ.", ResponseStatusCodeConst.VALIDATION_ERROR);
-//        }
-        return responseFactory.fail("Người dùng không hợp lệ.", ResponseStatusCodeConst.VALIDATION_ERROR);
+        User user = userRepository.findByUsernameAndIdentificationNumber(userRequest.getUsername(), userRequest.getIdentificationNumber());
+        if (user == null) {
+            return responseFactory.fail("Không tìm thấy người dùng.", ResponseStatusCodeConst.DATA_NOT_FOUND_ERROR);
+        }
+
+        Optional<City> cityOptional = cityRepository.findById(user.getCityId());
+        if (!cityOptional.isPresent()) {
+            return responseFactory.fail("Tỉnh/Thành phố không hợp lệ.", ResponseStatusCodeConst.DATA_NOT_FOUND_ERROR);
+        }
+        City city = cityOptional.get();
+
+        Optional<Province> provinceOptional = provinceRepository.findById(user.getProvinceId());
+        if (!provinceOptional.isPresent()) {
+            return responseFactory.fail("Quận/Huyện không hợp lệ.", ResponseStatusCodeConst.DATA_NOT_FOUND_ERROR);
+        }
+        Province province = provinceOptional.get();
+
+        Optional<Ward> wardOptional = wardRepository.findById(user.getWardId());
+        if (!wardOptional.isPresent()) {
+            return responseFactory.fail("Xã/Phường không hợp lệ.", ResponseStatusCodeConst.DATA_NOT_FOUND_ERROR);
+        }
+        Ward ward = wardOptional.get();
+
+        Optional<Company> companyOptional = companyRepository.findById(user.getCompanyId());
+        if (!companyOptional.isPresent()) {
+            return responseFactory.fail("Công ty phụ thuộc không hợp lệ.", ResponseStatusCodeConst.DATA_NOT_FOUND_ERROR);
+        }
+        Company company = companyOptional.get();
+
+        UserResponse userResponse = UserResponse.builder()
+                .fullName(user.getFullName())
+                .phoneNumber(user.getUsername())
+                .identificationNumber(user.getIdentificationNumber())
+                .noOfVaccinated(user.getNoOfVaccinated())
+                .address(user.getAddress())
+                .ward(ward.getName())
+                .province(province.getName())
+                .city(city.getName())
+                .company(company)
+                .granted(user.getGranted() && company.getActive())
+                .build();
+        return responseFactory.success(userResponse);
     }
 
     public ResponseEntity<Object> updateUserInfo(UserRequest userRequest) {
-        return null;
+        User user = userRepository.findByUsername(userRequest.getUsername());
+        if (user == null) {
+            return responseFactory.fail("Người dùng không tồn tại.", ResponseStatusCodeConst.DATA_NOT_FOUND_ERROR);
+        }
+
+        if (StringUtils.isBlank(userRequest.getFullName())) {
+            return responseFactory.fail("Tên không được để trống.", ResponseStatusCodeConst.DATA_NOT_FOUND_ERROR);
+        }
+
+        if (StringUtils.isBlank(user.getUsername())) {
+            return responseFactory.fail("Tên đăng nhập không được để trống.", ResponseStatusCodeConst.DATA_NOT_FOUND_ERROR);
+        }
+
+        if (StringUtils.isBlank(userRequest.getAddress())) {
+            return responseFactory.fail("Địa chỉ không được để trống.", ResponseStatusCodeConst.DATA_NOT_FOUND_ERROR);
+        }
+
+        Optional<City> cityOptional = cityRepository.findById(user.getCityId());
+        if (!cityOptional.isPresent()) {
+            return responseFactory.fail("Tỉnh/Thành phố không hợp lệ.", ResponseStatusCodeConst.DATA_NOT_FOUND_ERROR);
+        }
+        City city = cityOptional.get();
+
+        Optional<Province> provinceOptional = provinceRepository.findById(user.getProvinceId());
+        if (!provinceOptional.isPresent()) {
+            return responseFactory.fail("Quận/Huyện không hợp lệ.", ResponseStatusCodeConst.DATA_NOT_FOUND_ERROR);
+        }
+        Province province = provinceOptional.get();
+
+        Optional<Ward> wardOptional = wardRepository.findById(user.getWardId());
+        if (!wardOptional.isPresent()) {
+            return responseFactory.fail("Xã/Phường không hợp lệ.", ResponseStatusCodeConst.DATA_NOT_FOUND_ERROR);
+        }
+        Ward ward = wardOptional.get();
+
+        Optional<Company> companyOptional = companyRepository.findById(user.getCompanyId());
+        if (!companyOptional.isPresent()) {
+            return responseFactory.fail("Công ty phụ thuộc không hợp lệ.", ResponseStatusCodeConst.DATA_NOT_FOUND_ERROR);
+        }
+        Company company = companyOptional.get();
+
+        if (!user.getFullName().equals(userRequest.getFullName().trim())) {
+            user.setFullName(userRequest.getFullName().trim());
+        }
+
+        if (!user.getUsername().equals(userRequest.getUsername().trim())) {
+            user.setUsername(userRequest.getUsername().trim());
+        }
+
+        if (!user.getIdentificationNumber().equals(userRequest.getIdentificationNumber().trim())) {
+            user.setIdentificationNumber(userRequest.getIdentificationNumber().trim());
+        }
+
+        if (!user.getAddress().equals(userRequest.getAddress().trim())) {
+            user.setAddress(userRequest.getAddress().trim());
+        }
+
+        if (!user.getWardId().equals(userRequest.getWardId())) {
+            user.setWardId(ward.getId());
+        }
+
+        if (!user.getProvinceId().equals(userRequest.getProvinceId())) {
+            user.setProvinceId(province.getId());
+        }
+
+        if (!user.getCityId().equals(userRequest.getCityId())) {
+            user.setCityId(city.getId());
+        }
+
+        if (!user.getCompanyId().equals(userRequest.getCompanyId())) {
+            user.setCompanyId(company.getId());
+        }
+
+        if (!user.getNoOfVaccinated().equals(userRequest.getNoOfVaccinated())) {
+            user.setNoOfVaccinated(userRequest.getNoOfVaccinated());
+        }
+
+        if (!user.getGranted().equals(userRequest.getGranted())) {
+            user.setGranted(userRequest.getGranted() && company.getActive());
+        }
+
+        userRepository.save(user);
+        return responseFactory.success("Thành công");
     }
 
 }

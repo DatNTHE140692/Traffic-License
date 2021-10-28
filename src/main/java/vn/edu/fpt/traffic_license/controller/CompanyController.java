@@ -20,6 +20,17 @@ public class CompanyController {
     private final CompanyServices companyServices;
     private final ResponseFactory responseFactory;
 
+    @GetMapping("/get-companies")
+    public ResponseEntity<Object> getCompaniesByLocation(@RequestParam("ward_id") Long wardId,
+                                                         @RequestParam("province_id") Long provinceId,
+                                                         @RequestParam("city_id") Long cityId) {
+        try {
+            return companyServices.getCompaniesByLocation(wardId, provinceId, cityId);
+        } catch (Exception ex) {
+            return responseFactory.fail(String.format("Server error, %s", ex.getMessage()), ResponseStatusCodeConst.INTERNAL_SERVER_ERROR);
+        }
+    }
+
     @GetMapping
     public ResponseEntity<Object> getCompanies(PagingOptionDto pagingOptionDto,
                                                @RequestParam(name = "name", required = false) String name,

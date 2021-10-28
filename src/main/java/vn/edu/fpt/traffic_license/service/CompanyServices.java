@@ -21,9 +21,12 @@ import vn.edu.fpt.traffic_license.request.CompanyRequest;
 import vn.edu.fpt.traffic_license.response.GeneralResponse;
 import vn.edu.fpt.traffic_license.response.ResponseFactory;
 import vn.edu.fpt.traffic_license.utils.StringUtils;
+import vn.edu.fpt.traffic_license.utils.Utils;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 @Service
 @RequiredArgsConstructor
@@ -34,6 +37,11 @@ public class CompanyServices {
     private final WardRepository wardRepository;
     private final ProvinceRepository provinceRepository;
     private final CityRepository cityRepository;
+
+    public ResponseEntity<Object> getCompaniesByLocation(Long wardId, Long provinceId, Long cityId) {
+        Set<Company> companies = companyRepository.findByWardIdAndProvinceIdAndCityId(wardId, provinceId, cityId);
+        return responseFactory.success(Utils.isEmpty(companies) ? Collections.emptySet() : companies);
+    }
 
     public ResponseEntity<Object> getCompanies(Pageable pageable,
                                                String name,

@@ -3,16 +3,18 @@ package vn.edu.fpt.traffic_license.controller;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 import vn.edu.fpt.traffic_license.constants.ResponseStatusCodeConst;
 import vn.edu.fpt.traffic_license.repository.specification.PagingOptionDto;
-import vn.edu.fpt.traffic_license.request.CompanyRequest;
 import vn.edu.fpt.traffic_license.response.ResponseFactory;
 import vn.edu.fpt.traffic_license.service.CompanyServices;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/management/company")
+@RequestMapping("/api/company")
 public class CompanyController {
 
     private final CompanyServices companyServices;
@@ -43,23 +45,4 @@ public class CompanyController {
             return responseFactory.fail(String.format("Server error, %s", ex.getMessage()), ResponseStatusCodeConst.INTERNAL_SERVER_ERROR);
         }
     }
-
-    @PutMapping
-    public ResponseEntity<Object> create(@RequestBody CompanyRequest companyRequest) {
-        try {
-            return companyServices.create(companyRequest);
-        } catch (Exception ex) {
-            return responseFactory.fail(String.format("Server error, %s", ex.getMessage()), ResponseStatusCodeConst.INTERNAL_SERVER_ERROR);
-        }
-    }
-
-    @PatchMapping
-    public ResponseEntity<Object> update(@RequestBody CompanyRequest companyRequest) {
-        try {
-            return companyServices.update(companyRequest);
-        } catch (Exception ex) {
-            return responseFactory.fail(String.format("Server error, %s", ex.getMessage()), ResponseStatusCodeConst.INTERNAL_SERVER_ERROR);
-        }
-    }
-
 }

@@ -13,7 +13,7 @@ import vn.edu.fpt.traffic_license.service.UserServices;
 @RestController
 @RequestMapping("/management/user")
 @RequiredArgsConstructor
-public class UserController {
+public class UserManagementController {
 
     private final UserServices userServices;
     private final ResponseFactory responseFactory;

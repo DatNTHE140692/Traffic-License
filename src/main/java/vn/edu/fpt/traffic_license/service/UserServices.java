@@ -48,6 +48,11 @@ public class UserServices implements UserDetailsService {
         return new UserDetailsImpl(user, userRoleRepository, roleRepository);
     }
 
+    public ResponseEntity<Object> isUserExisted(String phoneNumber) {
+        User user = userRepository.findByUsername(phoneNumber);
+        return responseFactory.success(user != null);
+    }
+
     public ResponseEntity<Object> getUsers(Pageable pageable,
                                            String name,
                                            String username,
@@ -140,9 +145,9 @@ public class UserServices implements UserDetailsService {
                 .identificationNumber(user.getIdentificationNumber())
                 .noOfVaccinated(user.getNoOfVaccinated())
                 .address(user.getAddress())
-                .ward(ward.getName())
-                .province(province.getName())
-                .city(city.getName())
+                .ward(ward)
+                .province(province)
+                .city(city)
                 .company(company)
                 .granted(user.getGranted() && company.getActive())
                 .build();
